@@ -5,4 +5,8 @@ export default {
   secondaryTextColor: '#727C8F',
   fontFamily: 'Nunito-Regular',
   fontFamilyBold: 'Nunito-Bold',
+  incomeColor: '#00BFA6',
+  outcomeColor: '#F50057',
+  secondaryIncomeColor: '#00A08B',
+  secondaryOutcomeColor: '#C30342',
 };
