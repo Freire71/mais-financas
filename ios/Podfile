@@ -4,7 +4,10 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '10.0'
 
 target 'TransactionsManager' do
+
   config = use_native_modules!
+  pod 'RNInputMask', :path => '../node_modules/react-native-text-input-mask/ios/InputMask'
+
 
   use_react_native!(:path => config["reactNativePath"])
 
@@ -22,3 +25,5 @@ target 'TransactionsManager' do
     flipper_post_install(installer)
   end
 end
+
+  
