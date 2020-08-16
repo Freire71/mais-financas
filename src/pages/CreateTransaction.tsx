@@ -142,7 +142,6 @@ const CreateTransaction = (props: IProps) => {
           onPress={setType}
           required
           label="Tipo"
-          maxSelectCount={1}
           data={[ITransactionTypeEnum.INCOME, ITransactionTypeEnum.OUTCOME]}
           tip="As transações podem ser de dois tipos: entrada e saída."
         />
@@ -152,7 +151,6 @@ const CreateTransaction = (props: IProps) => {
           onPress={setCategory}
           isDisabled={type === ITransactionTypeEnum.INCOME || !type}
           label="Categoria"
-          maxSelectCount={1}
           data={[
             ITransactionCategoryEnum.GENERAL,
             ITransactionCategoryEnum.FUN,
