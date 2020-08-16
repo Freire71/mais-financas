@@ -23,7 +23,7 @@ const Label = styled.Text<{disabled?: boolean; color: string}>`
 `;
 
 const Separator = styled.View`
-  width: ${wp(2)};
+  width: ${wp(2)}px;
 `;
 
 const BaseCardShadow = styled.View`

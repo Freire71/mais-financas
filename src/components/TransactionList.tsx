@@ -27,8 +27,8 @@ const EmptyListContainer = styled.View`
   align-items: center;
   justify-content: center;
   align-self: center;
-  height: 200;
-  width: 250;
+  height: 200px;
+  width: 250px;
 `;
 
 export interface ITransactionListProps {
