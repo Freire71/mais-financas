@@ -123,6 +123,8 @@ const CreateTransaction = (props: IProps) => {
         rightAction={{
           iconName: 'trash-outline',
           onPress: clearData,
+          AHint: 'Ao clicar, volta o formulário para o estado inicial',
+          ALabel: 'Limpar',
         }}
       />
       <Container>
