@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import DisplayMonetaryValue from '../utils/DisplayMonetaryValue';
+import Transaction, {ITransactionTypeEnum} from '../models/Transaction';
 
 const BaseCardShadow = styled.View`
   shadow-color: #000;
@@ -51,30 +52,7 @@ const Amount = styled.Text<{type: ITransactionTypeEnum}>`
       : props.theme.secondaryOutcomeColor};
 `;
 
-export enum ITransactionTypeEnum {
-  INCOME = 'Entrada',
-  OUTCOME = 'Saída',
-}
-
-export enum ITransactionCategoryEnum {
-  FOOD = 'Alimentação',
-  HABITATITON = 'Habitação',
-  HEALTHCARE = 'Saúde',
-  EDUCATION = 'Educação',
-  FUN = 'Lazer',
-  GENERAL = 'Geral',
-}
-
-export interface ITrasanctionItemProps {
-  id: string;
-  amount: number;
-  type: ITransactionTypeEnum;
-  category?: ITransactionCategoryEnum;
-  title: string;
-  description?: string;
-}
-
-const TransactionItem = (props: ITrasanctionItemProps) => {
+const TransactionItem = (props: Transaction) => {
   return (
     <Container>
       <DataContainer>
