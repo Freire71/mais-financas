@@ -59,12 +59,14 @@ const Title = styled.Text`
   font-size: 22;
   margin-bottom: 5;
   color: #424957;
+  font-family: ${(props) => props.theme.fontFamily};
 `;
 
 const SubTitle = styled.Text`
   text-align: center;
   font-size: 18;
   color: #424957;
+  font-family: ${(props) => props.theme.fontFamily};
 `;
 
 const Item = styled.View`
