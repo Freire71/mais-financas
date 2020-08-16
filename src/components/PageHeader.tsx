@@ -1,10 +1,11 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {SafeAreaView, TouchableOpacity} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const Container = styled.View`
   width: 100%;
@@ -28,16 +29,21 @@ export const Content = styled.View`
 
 export const Label = styled.Text`
   font-size: 18px;
-  color: black;
+  color: ${(props) => props.theme.primaryColor};
   flex: 1;
   padding-bottom: ${wp(0.4)}px;
   margin-left: 10px;
   text-align: center;
+  font-family: ${(props) => props.theme.fontFamilyBold};
 `;
 
 interface IProps {
   label: string;
   centerText?: boolean;
+  rightAction?: {
+    iconName: string;
+    onPress: () => void;
+  };
 }
 
 const PageHeader = (props: IProps) => {
@@ -48,6 +54,17 @@ const PageHeader = (props: IProps) => {
           <Label numberOfLines={2} ellipsizeMode="tail">
             {props.label}
           </Label>
+          {props.rightAction && (
+            <TouchableOpacity
+              onPress={props.rightAction.onPress}
+              style={{right: 0, position: 'absolute', marginRight: 5}}>
+              <Icon
+                name={props.rightAction.iconName}
+                size={25}
+                color="#6C63FF"
+              />
+            </TouchableOpacity>
+          )}
         </Content>
       </Container>
     </SafeAreaView>
