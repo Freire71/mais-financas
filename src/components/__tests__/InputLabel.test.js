@@ -5,8 +5,8 @@ import {render} from '../../utils/Tests';
 import InputLabel, {AHints, TestIDs} from '../InputLabel';
 
 describe('<InputLabel />', () => {
-  const label = 'Nome completo';
-  const tip = 'Uma dica';
+  const label = 'Full name';
+  const tip = 'Tip';
 
   it('should render properly', () => {
     const {getByTestId, getByA11yHint, getAllByHintText} = render(
@@ -40,15 +40,9 @@ describe('<InputLabel />', () => {
   });
 
   it('should render with required label', () => {
-    const {getByTestId, getByA11yHint, getAllByHintText} = render(
-      <InputLabel label={label} tip={tip} />,
-    );
+    const {getByA11yHint} = render(<InputLabel label={label} tip={tip} />);
     const labelComponent = getByA11yHint(AHints.label);
-    const icon = getAllByHintText(AHints.tipIcon); // Tooltip component  duplicate its icon child
-    const tipText = getByTestId(TestIDs.tipText);
 
     expect(labelComponent.children[0]).toBe(label);
-    expect(icon.length).toBeGreaterThan(0);
-    expect(tipText.children[0]).toBe(tip);
   });
 });
