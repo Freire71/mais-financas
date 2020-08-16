@@ -66,23 +66,31 @@ interface IProps {
   todayOutcome: number;
 }
 
+export const AHints = {
+  balanceCard: 'Card do saldo atual',
+  todayIncomeCard: 'Card de entrada diária',
+  todayOutcomeCard: 'Card de saída diária',
+};
+
 const BalanceCard = (props: IProps) => {
   return (
     <Container>
       <Title>Saldo Atual</Title>
-      <BalanceLabel>{DisplayMonetaryValue(props.balance)}</BalanceLabel>
+      <BalanceLabel accessibilityHint={AHints.balanceCard}>
+        {DisplayMonetaryValue(props.balance)}
+      </BalanceLabel>
       <DataCardContainer>
         <DataCard>
           <Icon name="caret-up-outline" size={25} color="#00BFA6" />
           <DataCardTitle>Entrada</DataCardTitle>
-          <DataCardBalanceLabel>
+          <DataCardBalanceLabel accessibilityHint={AHints.todayIncomeCard}>
             {DisplayMonetaryValue(props.todayIncome)}
           </DataCardBalanceLabel>
         </DataCard>
         <DataCard>
           <Icon name="caret-down-outline" size={25} color="#F50057" />
           <DataCardTitle>Saída</DataCardTitle>
-          <DataCardBalanceLabel>
+          <DataCardBalanceLabel accessibilityHint={AHints.todayOutcomeCard}>
             {DisplayMonetaryValue(props.todayOutcome)}
           </DataCardBalanceLabel>
         </DataCard>
