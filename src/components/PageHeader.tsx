@@ -12,7 +12,7 @@ export const Container = styled.View`
   height: ${hp(4.8)}px;
   shadow-color: #000;
   shadow-offset: 0px ${hp(0.324)}px;
-  shadow-opacity: 0.16px;
+  shadow-opacity: 0.16;
   border-bottom-width: 1px;
   border-bottom-color: #e4e4e4;
   background-color: #fff;
@@ -43,19 +43,36 @@ interface IProps {
   rightAction?: {
     iconName: string;
     onPress: () => void;
+    AHint?: string;
+    ALabel?: string;
   };
 }
+
+export const AHints = {
+  headerLabel: 'Aqui é exibido o nome da página atual',
+};
+
+export const TestIDs = {
+  iconContainer: 'icon-container',
+  headerLabel: 'header-label',
+};
 
 const PageHeader = (props: IProps) => {
   return (
     <SafeAreaView>
       <Container>
         <Content>
-          <Label numberOfLines={2} ellipsizeMode="tail">
+          <Label
+            accessibilityHint={AHints.headerLabel}
+            numberOfLines={2}
+            ellipsizeMode="tail">
             {props.label}
           </Label>
           {props.rightAction && (
             <TouchableOpacity
+              testID={TestIDs.iconContainer}
+              accessibilityHint={props.rightAction.AHint}
+              accessibilityLabel={props.rightAction.ALabel}
               onPress={props.rightAction.onPress}
               style={{right: 0, position: 'absolute', marginRight: 5}}>
               <Icon
