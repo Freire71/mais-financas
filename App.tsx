@@ -1,7 +1,7 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
 import 'react-native-gesture-handler';
-import {ThemeProvider} from 'styled-components';
+import {ThemeProvider} from 'styled-components/native';
 
 import NavigationContainer from './src/config/Navigator';
 import theme from './src/config/Theme';
