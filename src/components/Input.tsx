@@ -28,21 +28,27 @@ const Container = styled(BaseCardShadow)`
   border-radius: 10px;
   width: 90%;
   padding-left: 4%;
-  margin-bottom: ${hp(2)};
+  margin-bottom: ${hp(2)}px;
 `;
 
 interface IProps {
   keyboardType: KeyboardTypeOptions;
   handleValue: (value: string) => void;
-  defaultValue?: any;
   placeholder?: string;
   mask?: string;
   label: string;
-  initialValue?: string;
   tip?: string;
   required?: boolean;
   value: any;
 }
+
+export const AHints = {
+  inputMask: 'Esse é o componente de entrada de dados',
+};
+
+export const TestIDs = {
+  inputMaskContainer: 'inpust-mask-container',
+};
 
 const Input = (props: IProps) => {
   return (
@@ -53,8 +59,9 @@ const Input = (props: IProps) => {
         tip={props.tip}
       />
 
-      <Container>
+      <Container testID={TestIDs.inputMaskContainer}>
         <TextInputMask
+          accessibilityHint={AHints.inputMask}
           placeholder={props.placeholder || ''}
           onChangeText={props.handleValue}
           keyboardType={props.keyboardType}
