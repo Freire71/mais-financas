@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import DisplayMonetaryValue from '../utils/DisplayMonetaryValue';
+
 const BaseCardShadow = styled.View`
   shadow-color: #000;
   shadow-offset: 0px 1px;
@@ -11,7 +13,7 @@ const BaseCardShadow = styled.View`
 `;
 
 const Container = styled(BaseCardShadow)`
-  background-color: #fff;
+  background-color: ${(props) => props.theme.primaryColor};
   align-self: center;
   border-radius: 10px;
   padding: 12px;
@@ -24,13 +26,13 @@ const Container = styled(BaseCardShadow)`
 const Title = styled.Text`
   font-size: 18px;
   font-family: ${(props) => props.theme.fontFamily};
-  color: ${(props) => props.theme.primaryTextColor};
+  color: #fff;
   margin-bottom: 5px;
 `;
 
 const BalanceLabel = styled.Text`
   font-family: ${(props) => props.theme.fontFamilyBold};
-  color: ${(props) => props.theme.primaryTextColor};
+  color: #fff;
   font-size: 25px;
 `;
 
@@ -42,11 +44,13 @@ const DataCardContainer = styled.View`
 `;
 
 const DataCardTitle = styled(Title)`
+  color: ${(props) => props.theme.primaryTextColor};
   font-size: 14px;
 `;
 
 const DataCardBalanceLabel = styled(BalanceLabel)`
   font-size: 18px;
+  color: ${(props) => props.theme.primaryTextColor};
 `;
 
 const DataCard = styled(BaseCardShadow)`
@@ -66,20 +70,20 @@ const BalanceCard = (props: IProps) => {
   return (
     <Container>
       <Title>Saldo Atual</Title>
-      <BalanceLabel>R$ {props.balance.toFixed(2).toString()}</BalanceLabel>
+      <BalanceLabel>{DisplayMonetaryValue(props.balance)}</BalanceLabel>
       <DataCardContainer>
         <DataCard>
           <Icon name="caret-up-outline" size={25} color="#00BFA6" />
           <DataCardTitle>Entrada</DataCardTitle>
           <DataCardBalanceLabel>
-            R$ {props.todayIncome.toFixed(2).toString()}
+            {DisplayMonetaryValue(props.todayIncome)}
           </DataCardBalanceLabel>
         </DataCard>
         <DataCard>
           <Icon name="caret-down-outline" size={25} color="#F50057" />
           <DataCardTitle>Saída</DataCardTitle>
           <DataCardBalanceLabel>
-            R$ {props.todayOutcome.toFixed(2).toString()}
+            {DisplayMonetaryValue(props.todayOutcome)}
           </DataCardBalanceLabel>
         </DataCard>
       </DataCardContainer>
