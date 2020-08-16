@@ -9,7 +9,7 @@ import TransactionItem from './TransactionItem';
 import Transaction from '../models/Transaction';
 
 const SectionText = styled.Text`
-  font-size: 22;
+  font-size: 22px;
   color: ${(props) => props.theme.primaryTextColor};
   font-family: ${(props) => props.theme.fontFamily};
   margin-left: ${wp(5)};
@@ -17,7 +17,7 @@ const SectionText = styled.Text`
 `;
 
 const EmptyListText = styled.Text`
-  font-size: 22;
+  font-size: 22px;
   color: ${(props) => props.theme.secondaryTextColor};
   font-family: ${(props) => props.theme.fontFamily};
   text-align: center;
@@ -36,6 +36,16 @@ export interface ITransactionListProps {
   data: Transaction[];
 }
 
+export const AHints = {
+  title: 'Título da lista de transações',
+  emptyListText: 'Esse texto indica que a lista está vazia',
+  list: 'Essa é a lista de transações',
+};
+
+export const ALAbels = {
+  listItem: 'uma transação',
+};
+
 const TransactionList = (props: ITransactionListProps) => {
   const renderItem = ({item}: {item: Transaction}) => {
     return <TransactionItem {...item} />;
@@ -46,10 +56,16 @@ const TransactionList = (props: ITransactionListProps) => {
 
   return (
     <FlatList
-      ListHeaderComponent={() => <SectionText>{props.title}</SectionText>}
+      ListHeaderComponent={() => (
+        <SectionText accessibilityHint={AHints.title}>
+          {props.title}
+        </SectionText>
+      )}
       ListEmptyComponent={() => (
         <EmptyListContainer>
-          <EmptyListText numberOfLines={2}>
+          <EmptyListText
+            numberOfLines={2}
+            accessibilityHint={AHints.emptyListText}>
             Ainda não há transações registradas
           </EmptyListText>
         </EmptyListContainer>
