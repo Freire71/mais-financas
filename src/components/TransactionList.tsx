@@ -5,7 +5,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
-import TransactionItem, {ITrasanctionItemProps} from './TransactionItem';
+import TransactionItem from './TransactionItem';
+import Transaction from '../models/Transaction';
 
 const SectionText = styled.Text`
   font-size: 22;
@@ -15,22 +16,44 @@ const SectionText = styled.Text`
   margin-bottom: 3%;
 `;
 
+const EmptyListText = styled.Text`
+  font-size: 22;
+  color: ${(props) => props.theme.secondaryTextColor};
+  font-family: ${(props) => props.theme.fontFamily};
+  text-align: center;
+`;
+
+const EmptyListContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  height: 200;
+  width: 250;
+`;
+
 export interface ITransactionListProps {
   title: string;
-  data: ITrasanctionItemProps[];
+  data: Transaction[];
 }
 
 const TransactionList = (props: ITransactionListProps) => {
-  const renderItem = ({item}: {item: ITrasanctionItemProps}) => {
+  const renderItem = ({item}: {item: Transaction}) => {
     return <TransactionItem {...item} />;
   };
 
-  const keyExtractor = (item: ITrasanctionItemProps, index: number) =>
+  const keyExtractor = (item: Transaction, index: number) =>
     `${item.id}/${index}`;
 
   return (
     <FlatList
       ListHeaderComponent={() => <SectionText>{props.title}</SectionText>}
+      ListEmptyComponent={() => (
+        <EmptyListContainer>
+          <EmptyListText numberOfLines={2}>
+            Ainda não há transações registradas
+          </EmptyListText>
+        </EmptyListContainer>
+      )}
       contentContainerStyle={{
         backgroundColor: 'white',
         shadowColor: '#000',
