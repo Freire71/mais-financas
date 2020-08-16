@@ -63,12 +63,11 @@ interface IOption {
 
 const TransactionTypeSwitch = (props: IProps) => {
   React.useEffect(() => {
-    console.log('useEffect');
     setOptions(props.data.map((d) => ({title: d, selected: false})));
   }, []);
 
   React.useEffect(() => {
-    if (props.value === '') {
+    if (!props.value) {
       setOptions(props.data.map((d) => ({title: d, selected: false})));
       setSelectedItem(null);
     }
@@ -78,6 +77,9 @@ const TransactionTypeSwitch = (props: IProps) => {
   const [selectedItem, setSelectedItem] = React.useState<IOption | null>(null);
 
   const onPress = (index: number) => {
+    if (props.isDisabled) {
+      return;
+    }
     const newOptions = options.map((o) => ({title: o.title, selected: false}));
     newOptions[index].selected = true;
     setOptions(newOptions);
@@ -87,9 +89,11 @@ const TransactionTypeSwitch = (props: IProps) => {
 
   const renderItem = ({item, index}: {item: IOption; index: number}) => {
     let color;
-    if (!selectedItem) {
+    if (props.isDisabled) {
+      color = '#727C8F';
+    } else if (!selectedItem) {
       color = '#424957';
-    } else if (item.title !== selectedItem.title || props.isDisabled) {
+    } else if (item.title !== selectedItem.title) {
       color = '#727C8F';
     } else {
       color = '#6C63FF';
