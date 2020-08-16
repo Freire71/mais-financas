@@ -31,18 +31,39 @@ interface IProps {
   required?: boolean;
 }
 
+export const AHints = {
+  label: 'Aqui está indicado o nome do campo que será preenchido',
+  tipIcon: 'Mostra o ícone de ajuda',
+  tipText: 'Aqui está a explicação do campo que será preenchido',
+};
+
+export const TestIDs = {
+  label: 'input-label-text',
+  tipIcon: 'tip-icon',
+  tipText: 'tip-text',
+};
+
 const InputLabel = (props: IProps) => {
   return (
     <Container>
-      <Label>{props.required ? `${props.label} *` : `${props.label}`}</Label>
+      <Label accessibilityHint={AHints.label} testID={TestIDs.label}>
+        {props.required ? `${props.label} *` : `${props.label}`}
+      </Label>
       {props.tip && (
         <Tooltip
           backgroundColor="#6C63FF"
           withPointer={false}
           height={250}
           containerStyle={{left: wp(25), width: 225}}
-          popover={<TipText>{props.tip}</TipText>}>
+          popover={
+            <TipText
+              testID={TestIDs.tipText}
+              accessibilityHint={AHints.tipText}>
+              {props.tip}
+            </TipText>
+          }>
           <Icon
+            accessibilityHint={AHints.tipIcon}
             name="help-circle"
             size={25}
             color="#6C63FF"
