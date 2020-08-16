@@ -52,23 +52,51 @@ const Amount = styled.Text<{type: ITransactionTypeEnum}>`
       : props.theme.secondaryOutcomeColor};
 `;
 
+export const AHints = {
+  title: 'Aqui é exibido o titulo da transação',
+  amount: 'Aqui é exibido o valor da transação',
+  category: 'Aqui é exibido a categoria da transação',
+  type: 'Ícone que indica o tipo da transação',
+};
+
+export const ALabels = {
+  incomeTransaction: 'Transação de entrada',
+  outcomeTransaction: 'Transação de saída',
+};
+
 const TransactionItem = (props: Transaction) => {
   return (
     <Container>
       <DataContainer>
-        <Title numberOfLines={3} ellipsizeMode="tail" type={props.type}>
+        <Title
+          accessibilityHint={AHints.title}
+          numberOfLines={3}
+          ellipsizeMode="tail"
+          type={props.type}>
           {props.title}
         </Title>
-        {props.category && <Category>{props.category}</Category>}
-        <Amount type={props.type}>{DisplayMonetaryValue(props.amount)}</Amount>
+        {props.category && (
+          <Category accessibilityHint={AHints.category}>
+            {props.category}
+          </Category>
+        )}
+        <Amount accessibilityHint={AHints.amount} type={props.type}>
+          {DisplayMonetaryValue(props.amount)}
+        </Amount>
       </DataContainer>
       <Icon
+        accessibilityHint={AHints.type}
         name={
           props.type === ITransactionTypeEnum.INCOME
             ? 'caret-up-outline'
             : 'caret-down-outline'
         }
         size={25}
+        accessibilityLabel={
+          props.type === ITransactionTypeEnum.INCOME
+            ? ALabels.incomeTransaction
+            : ALabels.outcomeTransaction
+        }
         color={
           props.type === ITransactionTypeEnum.INCOME ? '#00BFA6' : '#F50057'
         }
