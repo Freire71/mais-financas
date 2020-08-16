@@ -85,14 +85,14 @@ const CreateTransaction = (props: IProps) => {
       setAlertText(text);
       return setShowAlert(true);
     }
-
-    createTransaction({
+    const transaction = {
       title,
       amount,
       type,
-      category,
+      category: type === ITransactionTypeEnum.OUTCOME && category,
       description,
-    } as ITransactionCreateData);
+    };
+    createTransaction(transaction as ITransactionCreateData);
     clearData();
     return Snackbar.show({
       text: 'Transação cadastrada com sucesso!',
