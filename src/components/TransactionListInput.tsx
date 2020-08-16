@@ -35,13 +35,12 @@ const Container = styled(BaseCardShadow)<{isDisabled?: boolean}>`
   padding-top: 12px;
   padding-bottom: 12px;
   width: 90%;
-  margin-bottom: ${hp(2)};
+  margin-bottom: ${hp(2)}px;
 `;
 
 interface IProps {
   tip?: string;
   label: string;
-  maxSelectCount: number;
   data: string[];
   isDisabled?: boolean;
   required?: boolean;
@@ -53,6 +52,10 @@ interface IOption {
   title: string;
   selected: boolean;
 }
+
+export const ALabels = {
+  item: 'Opção de escolha',
+};
 
 const TransactionTypeSwitch = (props: IProps) => {
   React.useEffect(() => {
@@ -70,9 +73,6 @@ const TransactionTypeSwitch = (props: IProps) => {
   const [selectedItem, setSelectedItem] = React.useState<IOption | null>(null);
 
   const onPress = (index: number) => {
-    if (props.isDisabled) {
-      return;
-    }
     const newOptions = options.map((o) => ({title: o.title, selected: false}));
     newOptions[index].selected = true;
     setOptions(newOptions);
@@ -92,7 +92,9 @@ const TransactionTypeSwitch = (props: IProps) => {
       color = '#6C63FF';
     }
     return (
-      <TouchableOpacity onPress={() => onPress(index)}>
+      <TouchableOpacity
+        accessibilityLabel={ALabels.item}
+        onPress={() => !props.isDisabled && onPress(index)}>
         <Label color={color}>{item.title}</Label>
       </TouchableOpacity>
     );
