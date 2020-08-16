@@ -1,5 +1,4 @@
-import React from 'react';
-import {KeyboardAvoidingView, Platform, View} from 'react-native';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {Button} from 'react-native-elements';
 import {
@@ -7,11 +6,19 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
+import Snackbar from 'react-native-snackbar';
+import Alert from 'react-native-awesome-alerts';
 
 import PageHeader from '../components/PageHeader';
 import Input from '../components/Input';
-import TransactionTypeSection from '../components/TransactionListInput';
-import DismissKeyboard from '../components/DismissKeyboard';
+import TransactionListInput from '../components/TransactionListInput';
+import {useTransactions} from '../providers/TransactionsProvider';
+
+import {
+  ITransactionCategoryEnum,
+  ITransactionTypeEnum,
+  ITransactionCreateData,
+} from '../models/Transaction';
 
 const Container = styled.ScrollView`
   padding-top: 10px;
@@ -26,28 +33,96 @@ const ButtonContainer = styled.View`
 interface IProps {}
 
 const CreateTransaction = (props: IProps) => {
-  const [title, setTitle] = React.useState<string>('');
-  const [type, setType] = React.useState<string>('');
-  const [category, setCategory] = React.useState<string>('');
-  const [stringAmount, setStringAmout] = React.useState<string>('0');
-  const [amount, setAmount] = React.useState<number>(0);
-  const [description, setDescription] = React.useState<string>('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText, setAlertText] = useState('');
+  const [title, setTitle] = useState<string>('');
+  const [type, setType] = useState<ITransactionTypeEnum | null>(null);
+  const [category, setCategory] = useState<ITransactionCategoryEnum | null>(
+    null,
+  );
+  const [stringAmount, setStringAmout] = useState<string>('0');
+  const [amount, setAmount] = useState<number>(0);
+  const [description, setDescription] = useState<string>('');
 
-  const onClearPress = () => {
+  const {createTransaction} = useTransactions();
+
+  const clearData = () => {
     setTitle('');
-    setType('');
-    setCategory('');
+    setType(null);
+    setCategory(null);
     setStringAmout('0');
+    setAmount(0);
     setDescription('');
+  };
+
+  const validateData = () => {
+    const errors: string[] = [];
+    if (title === '') {
+      errors.push('O campo de título é obrigatório.');
+    }
+    if (!type) {
+      errors.push('O campo de tipo é obrigatório.');
+    }
+    if (type === ITransactionTypeEnum.OUTCOME && !category) {
+      errors.push(
+        'O campo de categoria é obrigatório para transações do tipo saída.',
+      );
+    }
+    if (amount === 0) {
+      errors.push('O campo de valor é obrigatório.');
+    }
+    return errors;
+  };
+
+  const onRegisterPress = () => {
+    const errors = validateData();
+    if (errors.length > 0) {
+      const errorsString = errors.join('\n');
+      const text = 'Atenção ao preenchimento do formulário.\n\n'.concat(
+        errorsString,
+      );
+      console.log('deu erro');
+      setAlertText(text);
+      return setShowAlert(true);
+    }
+
+    createTransaction({
+      title,
+      amount,
+      type,
+      category,
+      description,
+    } as ITransactionCreateData);
+    clearData();
+    return Snackbar.show({
+      text: 'Transação cadastrada com sucesso!',
+      fontFamily: 'Nunito-Regular',
+      duration: Snackbar.LENGTH_SHORT,
+      backgroundColor: '#6C63FF',
+    });
   };
 
   return (
     <KeyboardAwareScrollView>
+      <Alert
+        show={showAlert}
+        showProgress={false}
+        title="Opa!"
+        message={alertText}
+        titleStyle={{fontFamily: 'Nunito-Bold', color: '#424957'}}
+        messageStyle={{fontFamily: 'Nunito-Bold', color: '#424957'}}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="OK"
+        confirmButtonColor="#6C63FF"
+        onConfirmPressed={() => setShowAlert(false)}
+      />
       <PageHeader
         label="Nova transação"
         rightAction={{
           iconName: 'trash-outline',
-          onPress: onClearPress,
+          onPress: clearData,
         }}
       />
       <Container>
@@ -60,28 +135,29 @@ const CreateTransaction = (props: IProps) => {
           keyboardType="default"
           tip="Esse campo é destinado para o título da sua transação. Esse é o principal identificador da mesma"
         />
-        <TransactionTypeSection
+        <TransactionListInput
           value={type}
           onPress={setType}
           required
           label="Tipo"
           maxSelectCount={1}
-          data={['Entrada', 'Saída']}
+          data={[ITransactionTypeEnum.INCOME, ITransactionTypeEnum.OUTCOME]}
           tip="As transações podem ser de dois tipos: entrada e saída."
         />
-        <TransactionTypeSection
+        <TransactionListInput
+          required={type === ITransactionTypeEnum.OUTCOME}
           value={category}
           onPress={setCategory}
-          isDisabled={type === 'Entrada' || type === ''}
+          isDisabled={type === ITransactionTypeEnum.INCOME || !type}
           label="Categoria"
           maxSelectCount={1}
           data={[
-            'Geral',
-            'Lazer',
-            'Educação',
-            'Saúde',
-            'Habitação',
-            'Alimentação',
+            ITransactionCategoryEnum.GENERAL,
+            ITransactionCategoryEnum.FUN,
+            ITransactionCategoryEnum.EDUCATION,
+            ITransactionCategoryEnum.HEALTHCARE,
+            ITransactionCategoryEnum.HABITATION,
+            ITransactionCategoryEnum.FOOD,
           ]}
           tip="A categoria da transação ajuda no controle dos seus gastos. Essa classificação aplica-se apenas a transações do tipo 'saída'"
         />
@@ -107,6 +183,7 @@ const CreateTransaction = (props: IProps) => {
         />
         <ButtonContainer>
           <Button
+            onPress={onRegisterPress}
             raised
             title="Cadastrar"
             buttonStyle={{
