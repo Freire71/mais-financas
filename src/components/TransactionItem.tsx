@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import DisplayMonetaryValue from '../utils/DisplayMonetaryValue';
+
 const BaseCardShadow = styled.View`
   shadow-color: #000;
   shadow-offset: 0px 1px;
@@ -57,7 +59,7 @@ export enum ITransactionTypeEnum {
 export enum ITransactionCategoryEnum {
   FOOD = 'Alimentação',
   HABITATITON = 'Habitação',
-  HEALTHCARE = 'Cuidados Médicos',
+  HEALTHCARE = 'Saúde',
   EDUCATION = 'Educação',
   FUN = 'Lazer',
   GENERAL = 'Geral',
@@ -80,9 +82,7 @@ const TransactionItem = (props: ITrasanctionItemProps) => {
           {props.title}
         </Title>
         {props.category && <Category>{props.category}</Category>}
-        <Amount type={props.type}>
-          R$ {props.amount.toFixed(2).toString()}
-        </Amount>
+        <Amount type={props.type}>{DisplayMonetaryValue(props.amount)}</Amount>
       </DataContainer>
       <Icon
         name={
