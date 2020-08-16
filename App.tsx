@@ -5,15 +5,16 @@ import {ThemeProvider} from 'styled-components';
 
 import NavigationContainer from './src/config/Navigator';
 import theme from './src/config/Theme';
-
-declare const global: {HermesInternal: null | {}};
+import {TransactionsProvider} from './src/providers/TransactionsProvider';
 
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StatusBar barStyle="dark-content" />
-      </NavigationContainer>
+      <TransactionsProvider>
+        <NavigationContainer>
+          <StatusBar barStyle="dark-content" />
+        </NavigationContainer>
+      </TransactionsProvider>
     </ThemeProvider>
   );
 };
