@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  Platform,
-  Text,
-  Switch,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
