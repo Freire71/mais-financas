@@ -68,7 +68,7 @@ const CreateTransaction = (props: IProps) => {
         'O campo de categoria é obrigatório para transações do tipo saída.',
       );
     }
-    if (amount === 0) {
+    if (isNaN(amount) || amount === 0) {
       errors.push('O campo de valor é obrigatório.');
     }
     return errors;
@@ -89,7 +89,7 @@ const CreateTransaction = (props: IProps) => {
       title,
       amount,
       type,
-      category: type === ITransactionTypeEnum.OUTCOME && category,
+      category: type === ITransactionTypeEnum.OUTCOME ? category : null,
       description,
     };
     createTransaction(transaction as ITransactionCreateData);
