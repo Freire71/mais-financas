@@ -80,7 +80,6 @@ const Item = styled.View`
 const SIZES = Dimensions.get('window');
 
 const Tour = (props: any) => {
-  console.log(SIZES);
   const [currentView, setCurrentView] = React.useState<number>(0);
 
   const tourData = [
