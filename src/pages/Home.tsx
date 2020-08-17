@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {NavigationTabScreenProps} from 'react-navigation-tabs';
 
 import PageHeader from '../components/PageHeader';
 import BalanceCard from '../components/BalanceCard';
@@ -15,7 +16,9 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Home = () => {
+interface IProps extends NavigationTabScreenProps {}
+
+const Home = (props: IProps) => {
   const {
     lastTransactions,
     todayIncomeTransactionAmount,
