@@ -40,6 +40,8 @@ interface IProps {
   tip?: string;
   required?: boolean;
   value: any;
+  password?: boolean;
+  capitalize?: boolean;
 }
 
 export const AHints = {
@@ -61,6 +63,7 @@ const Input = (props: IProps) => {
 
       <Container testID={TestIDs.inputMaskContainer}>
         <TextInputMask
+          secureTextEntry={props.password}
           accessibilityHint={AHints.inputMask}
           placeholder={props.placeholder || ''}
           onChangeText={props.handleValue}
@@ -72,7 +75,7 @@ const Input = (props: IProps) => {
           value={props.value}
           defaultValue={props.value}
           numberOfLines={5}
-          autoCapitalize={'sentences'}
+          autoCapitalize={props.capitalize ? 'sentences' : 'none'}
         />
       </Container>
     </>
