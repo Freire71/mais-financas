@@ -58,6 +58,7 @@ const DataCard = styled(BaseCardShadow)`
   align-items: center;
   border-radius: 6px;
   padding: 10px;
+  min-width: 100px;
 `;
 
 interface IProps {
