@@ -1,51 +1,29 @@
 import React from 'react';
-import {SafeAreaView, TouchableOpacity} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {TouchableOpacity, View} from 'react-native';
+
 import styled from 'styled-components/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-export const Container = styled.View`
-  width: 100%;
-  height: ${hp(4.8)}px;
-  shadow-color: #000;
-  shadow-offset: 0px ${hp(0.324)}px;
-  shadow-opacity: 0.16;
-  border-bottom-width: 1px;
-  border-bottom-color: #e4e4e4;
-  background-color: #fff;
-  z-index: 1;
-`;
-
-export const Content = styled.View`
-  height: 100%;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+import {Header} from 'react-native-elements';
 
 export const Label = styled.Text`
   font-size: 18px;
   color: ${(props) => props.theme.primaryColor};
-  flex: 1;
-  padding-bottom: ${wp(0.4)}px;
-  margin-left: 10px;
   text-align: center;
   font-family: ${(props) => props.theme.fontFamilyBold};
 `;
 
+interface IAction {
+  iconName: string;
+  onPress: () => void;
+  AHint?: string;
+  ALabel?: string;
+}
+
 interface IProps {
   label: string;
   centerText?: boolean;
-  rightAction?: {
-    iconName: string;
-    onPress: () => void;
-    AHint?: string;
-    ALabel?: string;
-  };
+  rightAction?: IAction;
+  leftAction?: IAction;
 }
 
 export const AHints = {
@@ -57,34 +35,43 @@ export const TestIDs = {
   headerLabel: 'header-label',
 };
 
+const Action = (props: IAction) => (
+  <TouchableOpacity
+    testID={TestIDs.iconContainer}
+    accessibilityHint={props.AHint}
+    accessibilityLabel={props.ALabel}
+    onPress={props.onPress}>
+    <Icon name={props.iconName} size={27.5} color="#6C63FF" />
+  </TouchableOpacity>
+);
+
 const PageHeader = (props: IProps) => {
   return (
-    <SafeAreaView>
-      <Container>
-        <Content>
-          <Label
-            accessibilityHint={AHints.headerLabel}
-            numberOfLines={2}
-            ellipsizeMode="tail">
-            {props.label}
-          </Label>
-          {props.rightAction && (
-            <TouchableOpacity
-              testID={TestIDs.iconContainer}
-              accessibilityHint={props.rightAction.AHint}
-              accessibilityLabel={props.rightAction.ALabel}
-              onPress={props.rightAction.onPress}
-              style={{right: 0, position: 'absolute', marginRight: 5}}>
-              <Icon
-                name={props.rightAction.iconName}
-                size={25}
-                color="#6C63FF"
-              />
-            </TouchableOpacity>
-          )}
-        </Content>
-      </Container>
-    </SafeAreaView>
+    <View
+      style={{
+        paddingBottom: 10,
+        backgroundColor: 'rgb(250,250,250)',
+      }}>
+      <Header
+        statusBarProps={{barStyle: 'dark-content'}}
+        barStyle="light-content"
+        rightComponent={props.rightAction && <Action {...props.rightAction} />}
+        leftComponent={props.leftAction && <Action {...props.leftAction} />}
+        centerComponent={<Label>{props.label}</Label>}
+        containerStyle={{
+          backgroundColor: '#fff',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+
+          elevation: 3,
+        }}
+      />
+    </View>
   );
 };
 
