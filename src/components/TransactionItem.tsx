@@ -28,6 +28,7 @@ const Container = styled(BaseCardShadow)`
 `;
 
 const DataContainer = styled.View`
+  flex: 7;
   margin-left: 2%;
   margin-right: 2%;
 `;
@@ -35,7 +36,6 @@ const DataContainer = styled.View`
 const Title = styled.Text<{type: ITransactionTypeEnum}>`
   font-family: ${(props) => props.theme.fontFamilyBold};
   font-size: 16px;
-  max-width: 95%;
   color: ${(props) => props.theme.primaryTextColor};
 `;
 
@@ -85,6 +85,7 @@ const TransactionItem = (props: Transaction) => {
         </Amount>
       </DataContainer>
       <Icon
+        style={{flex: 1}}
         accessibilityHint={AHints.type}
         name={
           props.type === ITransactionTypeEnum.INCOME
