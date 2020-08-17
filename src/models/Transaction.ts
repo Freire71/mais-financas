@@ -22,7 +22,7 @@ export interface ITransactionCreateData {
   type: ITransactionTypeEnum;
   category?: ITransactionCategoryEnum;
   created_at?: Date;
-  updated_at: Date;
+  updated_at?: Date;
 }
 
 export interface ITransactionUpdateData {
