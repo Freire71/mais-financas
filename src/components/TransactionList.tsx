@@ -12,7 +12,7 @@ const SectionText = styled.Text`
   font-size: 22px;
   color: ${(props) => props.theme.primaryTextColor};
   font-family: ${(props) => props.theme.fontFamily};
-  margin-left: ${wp(5)};
+  margin-left: ${wp(5)}px;
   margin-bottom: 3%;
 `;
 
