@@ -9,7 +9,7 @@ import TransactionItem from './TransactionItem';
 import Transaction from '../models/Transaction';
 
 const SectionText = styled.Text`
-  font-size: 22px;
+  font-size: 20px;
   color: ${(props) => props.theme.primaryTextColor};
   font-family: ${(props) => props.theme.fontFamily};
   margin-left: ${wp(5)}px;
@@ -88,6 +88,7 @@ const TransactionList = (props: ITransactionListProps) => {
         paddingBottom: '3%',
       }}
       data={props.data}
+      extraData={props.data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}
     />
