@@ -20,7 +20,7 @@ const Container = styled(BaseCardShadow)`
   align-items: center;
   justify-content: center;
   width: 90%;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 `;
 
 const Title = styled.Text`
