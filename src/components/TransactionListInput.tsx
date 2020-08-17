@@ -46,6 +46,7 @@ interface IProps {
   required?: boolean;
   onPress: (item: any) => void;
   value: any;
+  initialValue?: string;
 }
 
 interface IOption {
@@ -59,7 +60,19 @@ export const ALabels = {
 
 const TransactionTypeSwitch = (props: IProps) => {
   React.useEffect(() => {
-    setOptions(props.data.map((d) => ({title: d, selected: false})));
+    let selectedItem = null;
+    setOptions(
+      props.data.map((d) => {
+        let selected = false;
+        if (props.initialValue && props.initialValue === d) {
+          selected = props.initialValue === d;
+          selectedItem = {title: d, selected};
+        }
+        const register = {title: d, selected};
+        return register;
+      }),
+    );
+    setSelectedItem(selectedItem);
   }, []);
 
   React.useEffect(() => {
