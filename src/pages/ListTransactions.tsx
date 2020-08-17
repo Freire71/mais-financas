@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Text} from 'react-native';
 import styled from 'styled-components/native';
+import {NavigationTabScreenProps} from 'react-navigation-tabs';
 
 import PageHeader from '../components/PageHeader';
 import TransactionList from '../components/TransactionList';
@@ -17,7 +18,9 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const ListTransactions = () => {
+interface IProps extends NavigationTabScreenProps {}
+
+const ListTransactions = (props: IProps) => {
   const typeAll = 'Todos';
   const categoryAll = 'Todas';
   const [listTitle, setListTitle] = useState('Todas transações');
