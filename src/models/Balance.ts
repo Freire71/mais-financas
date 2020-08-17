@@ -23,6 +23,7 @@ class Balance {
       id: {type: 'string', indexed: true},
       amount: 'double',
       created_at: {type: 'date', default: new Date(), indexed: true},
+      owner: 'User',
     },
   };
 }

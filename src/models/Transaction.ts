@@ -64,13 +64,14 @@ class Transaction {
     primaryKey: 'id',
     properties: {
       id: {type: 'string', indexed: true},
-      title: {type: 'string', indexed: true},
+      title: 'string',
       amount: 'double',
       description: 'string?',
       type: {type: 'string', indexed: true},
-      category: 'string?',
+      category: {type: 'string?', indexed: true},
       created_at: {type: 'date', default: new Date(), indexed: true},
       updated_at: {type: 'date', default: new Date()},
+      owner: 'User',
     },
   };
 }
