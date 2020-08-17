@@ -10,14 +10,14 @@ import {useTransactions} from '../providers/TransactionsProvider';
 import {useBalance} from '../providers/BalanceProvider';
 
 const Container = styled.View`
-  padding-top: 10px;
+  padding-top: 12px;
   background-color: rgb(250, 250, 250);
   flex: 1;
 `;
 
 const Home = () => {
   const {
-    transactions,
+    lastTransactions,
     todayIncomeTransactionAmount,
     todayOutcomeTransactionAmount,
   } = useTransactions();
@@ -31,7 +31,7 @@ const Home = () => {
           todayOutcome={todayOutcomeTransactionAmount}
           balance={currentBalance}
         />
-        <TransactionList title="Últimas transações" data={transactions} />
+        <TransactionList title="Últimas transações" data={lastTransactions} />
       </Container>
     </>
   );
