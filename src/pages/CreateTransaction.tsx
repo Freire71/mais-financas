@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
+import {View, ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {Button} from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {NavigationTabScreenProps} from 'react-navigation-tabs';
 import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
 import Snackbar from 'react-native-snackbar';
 import Alert from 'react-native-awesome-alerts';
@@ -30,11 +32,12 @@ const ButtonContainer = styled.View`
   align-self: center;
 `;
 
-interface IProps {}
+interface IProps extends NavigationTabScreenProps {}
 
 const CreateTransaction = (props: IProps) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState('');
+
   const [title, setTitle] = useState<string>('');
   const [type, setType] = useState<ITransactionTypeEnum | null>(null);
   const [category, setCategory] = useState<ITransactionCategoryEnum | null>(
@@ -102,7 +105,22 @@ const CreateTransaction = (props: IProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView
+      bounces={false}
+      contentContainerStyle={{
+        backgroundColor: 'rgb(250,250,250)',
+        flex: 1,
+        paddingTop: 12,
+      }}>
+      <PageHeader
+        label="Nova transação"
+        rightAction={{
+          iconName: 'trash-outline',
+          onPress: clearData,
+          AHint: 'Ao clicar, volta o formulário para o estado inicial',
+          ALabel: 'Limpar',
+        }}
+      />
       <Alert
         show={showAlert}
         showProgress={false}
@@ -117,17 +135,10 @@ const CreateTransaction = (props: IProps) => {
         confirmButtonColor="#6C63FF"
         onConfirmPressed={() => setShowAlert(false)}
       />
-      <PageHeader
-        label="Nova transação"
-        rightAction={{
-          iconName: 'trash-outline',
-          onPress: clearData,
-          AHint: 'Ao clicar, volta o formulário para o estado inicial',
-          ALabel: 'Limpar',
-        }}
-      />
+
       <Container>
         <Input
+          capitalize
           placeholder="Digite aqui o título transação"
           label="Título"
           required
@@ -161,9 +172,10 @@ const CreateTransaction = (props: IProps) => {
           tip="A categoria da transação ajuda no controle dos seus gastos. Essa classificação aplica-se apenas a transações do tipo 'saída'"
         />
         <Input
+          required
           placeholder="Digite aqui o valor da transação"
           value={stringAmount}
-          label="Valor *"
+          label="Valor"
           handleValue={(value) => {
             setAmount(parseFloat(value.replace('R$', '')));
             setStringAmout(value);
@@ -173,6 +185,7 @@ const CreateTransaction = (props: IProps) => {
           tip="Insira aqui o valor da sua transação. Não é necessário colocar valores negativos para transações de saída. Valor máximo: R$ 99999999.99"
         />
         <Input
+          capitalize
           placeholder="Digite aqui a descrição da transação"
           value={description}
           label="Descrição"
@@ -183,7 +196,6 @@ const CreateTransaction = (props: IProps) => {
         <ButtonContainer>
           <Button
             onPress={onRegisterPress}
-            raised
             title="Cadastrar"
             buttonStyle={{
               backgroundColor: '#6C63FF',
