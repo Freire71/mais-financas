@@ -7,6 +7,7 @@ import BalanceCard from '../components/BalanceCard';
 import TransactionList from '../components/TransactionList';
 
 import {useTransactions} from '../providers/TransactionsProvider';
+import {useBalance} from '../providers/BalanceProvider';
 
 const Container = styled.View`
   padding-top: 10px;
@@ -14,17 +15,21 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const Home = (props: any) => {
-  const {transactions} = useTransactions();
-
+const Home = () => {
+  const {
+    transactions,
+    todayIncomeTransactionAmount,
+    todayOutcomeTransactionAmount,
+  } = useTransactions();
+  const {currentBalance} = useBalance();
   return (
     <>
       <PageHeader label="+Finanças" />
       <Container>
         <BalanceCard
-          todayIncome={1000.0}
-          todayOutcome={525.3}
-          balance={3000.255}
+          todayIncome={todayIncomeTransactionAmount}
+          todayOutcome={todayOutcomeTransactionAmount}
+          balance={currentBalance}
         />
         <TransactionList title="Últimas transações" data={transactions} />
       </Container>
