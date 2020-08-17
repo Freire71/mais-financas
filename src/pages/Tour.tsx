@@ -1,10 +1,12 @@
 import React from 'react';
-import {FlatList, Dimensions} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import {withNavigation} from 'react-navigation';
+import {NavigationStackScreenProps} from 'react-navigation-stack';
 
 import {Button} from 'react-native-elements';
 import NoteList from '../assets/images/note_list.svg';
@@ -33,15 +35,16 @@ export const Content = styled.View`
 
 export const Footer = styled.View`
   flex: 3;
+  width: 60%;
   justify-content: center;
 `;
 
 export const DotContainer = styled.View`
-  height: 20;
+  height: 20px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: ${hp(2.2)};
+  margin-top: ${hp(2.2)}px;
 `;
 
 export const Dot = styled.View<{isActive: boolean}>`
@@ -56,15 +59,15 @@ export const Dot = styled.View<{isActive: boolean}>`
 
 const Title = styled.Text`
   text-align: center;
-  font-size: 22;
-  margin-bottom: 5;
+  font-size: 22px;
+  margin-bottom: 5px;
   color: #424957;
-  font-family: ${(props) => props.theme.fontFamily};
+  font-family: ${(props) => props.theme.fontFamilyBold};
 `;
 
 const SubTitle = styled.Text`
   text-align: center;
-  font-size: 18;
+  font-size: 18px;
   color: #424957;
   font-family: ${(props) => props.theme.fontFamily};
 `;
@@ -77,11 +80,10 @@ const Item = styled.View`
   justify-content: center;
 `;
 
-const SIZES = Dimensions.get('window');
+interface IProps extends NavigationStackScreenProps {}
 
-const Tour = (props: any) => {
+const Tour = (props: IProps) => {
   const [currentView, setCurrentView] = React.useState<number>(0);
-
   const tourData = [
     {
       title: 'Tenha controle de todos seus gastos',
@@ -135,7 +137,7 @@ const Tour = (props: any) => {
           renderItem={renderItem}
           keyExtractor={(_, index: number) => `tour-item-${index}`}
           showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={32}
+          scrollEventThrottle={16}
         />
         <DotContainer>
           {tourData.map((_, index) => (
@@ -145,12 +147,26 @@ const Tour = (props: any) => {
       </Content>
       <Footer>
         <Button
-          raised
-          title="Começar a utilizar"
+          onPress={() => props.navigation.navigate('Login')}
+          title="Entrar"
+          titleStyle={{
+            color: '#fff',
+            fontFamily: 'Nunito-Bold',
+          }}
           buttonStyle={{
             backgroundColor: '#6C63FF',
-            width: wp(60),
-            height: hp(6),
+          }}
+          containerStyle={{marginBottom: 10}}
+        />
+        <Button
+          onPress={() => props.navigation.navigate('CreateAccount')}
+          title="Criar Conta"
+          titleStyle={{
+            color: '#FFF',
+            fontFamily: 'Nunito-Bold',
+          }}
+          buttonStyle={{
+            backgroundColor: '#727C8F',
           }}
         />
       </Footer>
@@ -158,4 +174,4 @@ const Tour = (props: any) => {
   );
 };
 
-export default Tour;
+export default withNavigation(Tour);
