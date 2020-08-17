@@ -21,7 +21,7 @@ import {
 } from '../models/Transaction';
 
 const Container = styled.ScrollView`
-  padding-top: 10px;
+  padding-top: 12px;
   background-color: rgb(250, 250, 250);
   flex: 1;
 `;
@@ -81,7 +81,6 @@ const CreateTransaction = (props: IProps) => {
       const text = 'Atenção ao preenchimento do formulário.\n\n'.concat(
         errorsString,
       );
-      console.log('deu erro');
       setAlertText(text);
       return setShowAlert(true);
     }
