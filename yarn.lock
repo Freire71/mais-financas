@@ -5701,7 +5701,7 @@ mixin-object@^2.0.1:
     for-in "^0.1.3"
     is-extendable "^0.1.1"
 
-mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
+mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.5.tgz#d91cefd62d1436ca0f41620e251288d420099def"
   integrity sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==
@@ -5765,7 +5765,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-needle@^2.2.1:
+needle@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/needle/-/needle-2.5.0.tgz#e6fc4b3cc6c25caed7554bd613a5cf0bac8c31c0"
   integrity sha512-o/qITSDR0JCyCKEQ1/1bnUXMmznxabbwi/Y4WwJElf+evwJNFNwIDMCCt5IigFVxgeGBJESLohGtIS9gEzo1fA==
@@ -5828,13 +5828,14 @@ node-notifier@^6.0.0:
     shellwords "^0.1.1"
     which "^1.3.1"
 
-"node-pre-gyp@git+https://github.com/kneth/node-pre-gyp.git#add-node-14.0.0":
-  version "0.14.0"
-  resolved "git+https://github.com/kneth/node-pre-gyp.git#09b0c262cf9ba2cb28c8a29f6bb5882c8c160cdf"
+node-pre-gyp@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.15.0.tgz#c2fc383276b74c7ffa842925241553e8b40f1087"
+  integrity sha512-7QcZa8/fpaU/BKenjcaeFF9hLz2+7S9AqyXFhlH/rilsQ/hPZKK32RtR5EQHJElgu+q5RfbJ34KriI79UWaorA==
   dependencies:
     detect-libc "^1.0.2"
-    mkdirp "^0.5.1"
-    needle "^2.2.1"
+    mkdirp "^0.5.3"
+    needle "^2.5.0"
     nopt "^4.0.1"
     npm-packlist "^1.1.6"
     npmlog "^4.0.2"
@@ -6472,9 +6473,9 @@ query-string@^6.11.1:
     strict-uri-encode "^2.0.0"
 
 querystringify@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
-  integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
 
 ramda@^0.26.1:
   version "0.26.1"
@@ -6755,10 +6756,10 @@ readable-stream@^2.0.1, readable-stream@^2.0.6, readable-stream@^2.2.2, readable
     string_decoder "~1.1.1"
     util-deprecate "~1.0.1"
 
-realm@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/realm/-/realm-6.0.0.tgz#712d32f5b7ae75a546f6f519d1a61f1c95c6ae48"
-  integrity sha512-y5STBWf0cON4iINBN+kpYeeYC8J+3oNqZCrYBxlzedci//qSwmZiPQ9GQlWQt0ZS04B6OHg0UgzKRZdlaZDUzA==
+realm@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/realm/-/realm-6.0.4.tgz#cb5171c8a2f4641bd5ccf6ed1e314b2021e2b669"
+  integrity sha512-hrXBOXjjX97etVVdzysONdcdCjj9wyCRxJHWLTykU760FoTz719+bC9T7a+DdGxxfeZNn0tND3xYdOBId5YJhA==
   dependencies:
     command-line-args "^4.0.6"
     deepmerge "2.1.0"
@@ -6769,7 +6770,7 @@ realm@6.0.0:
     node-addon-api "^3.0.0"
     node-fetch "^1.7.3"
     node-machine-id "^1.1.10"
-    node-pre-gyp "git+https://github.com/kneth/node-pre-gyp.git#add-node-14.0.0"
+    node-pre-gyp "^0.15.0"
     progress "^2.0.3"
     prop-types "^15.6.2"
     request "^2.88.0"
