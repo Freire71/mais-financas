@@ -1,3 +1,5 @@
+import {ObjectId} from 'bson';
+
 export enum ITransactionTypeEnum {
   INCOME = 'Entrada',
   OUTCOME = 'Saída',
@@ -13,11 +15,14 @@ export enum ITransactionCategoryEnum {
 }
 
 export interface ITransactionCreateData {
+  id?: string;
   title: string;
   amount: number;
   description?: string;
   type: ITransactionTypeEnum;
   category?: ITransactionCategoryEnum;
+  created_at?: Date;
+  updated_at: Date;
 }
 
 export interface ITransactionUpdateData {
@@ -45,14 +50,28 @@ class Transaction {
   public updated_at: Date;
 
   constructor(data: ITransactionCreateData) {
-    this.id = Date.now().toString();
+    this.id = data.id ? data.id : String(new ObjectId());
     this.title = data.title;
     this.amount = data.amount;
     this.description = data.description || '';
     this.type = data.type;
     this.category = data.category;
-    this.created_at = new Date();
-    this.updated_at = new Date();
+    this.created_at = data.created_at ? data.created_at : new Date();
+    this.updated_at = data.updated_at ? data.updated_at : new Date();
   }
+  static schema = {
+    name: 'Transaction',
+    primaryKey: 'id',
+    properties: {
+      id: {type: 'string', indexed: true},
+      title: {type: 'string', indexed: true},
+      amount: 'double',
+      description: 'string?',
+      type: {type: 'string', indexed: true},
+      category: 'string?',
+      created_at: {type: 'date', default: new Date(), indexed: true},
+      updated_at: {type: 'date', default: new Date()},
+    },
+  };
 }
 export default Transaction;
