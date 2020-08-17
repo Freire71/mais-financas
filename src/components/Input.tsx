@@ -1,9 +1,6 @@
 import React from 'react';
 import {Platform, KeyboardTypeOptions} from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
 import TextInputMask from 'react-native-text-input-mask';
 import InputLabel from './InputLabel';
