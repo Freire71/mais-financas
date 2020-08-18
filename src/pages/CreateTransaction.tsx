@@ -179,7 +179,7 @@ const CreateTransaction = (props: IProps) => {
           mask={'R$ [99999999].[99]'}
           tip="Insira aqui o valor da sua transação. Não é necessário colocar valores negativos para transações de saída. Valor máximo: R$ 99999999.99"
         />
-        <Input
+        {/* <Input
           capitalize
           placeholder="Digite aqui a descrição da transação"
           value={description}
@@ -187,7 +187,7 @@ const CreateTransaction = (props: IProps) => {
           handleValue={setDescription}
           keyboardType="default"
           tip="Utilize o campo de descrição para adicionar informações adicionais sobre a transação"
-        />
+        /> */}
         <ButtonContainer>
           <Button
             onPress={onRegisterPress}
