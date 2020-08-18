@@ -16,28 +16,28 @@ const BalanceProvider = ({children}: {children: React.ReactChild}) => {
   let app: Realm;
   const collectionName = 'Balance';
 
-  const {currentUserId, getUser} = useAuth();
+  const {realmUserObject} = useAuth();
 
   const [currentBalance, setCurrentBalance] = useState(0);
   useEffect(() => {
-    if (!currentUserId) {
+    if (!realmUserObject) {
       return setCurrentBalance(0);
     }
     async function setup() {
       await loadLastBalance();
     }
     setup();
-  }, [currentUserId]);
+  }, [realmUserObject]);
 
   const loadLastBalance = async () => {
     app = await getRealm();
-    const user = await getUser();
+
     const balances = app
       .objects<Balance>(collectionName)
-      .filtered('owner = $0', user)
+      .filtered('owner = $0', realmUserObject)
       .sorted('created_at', true);
     if (!balances[0]) {
-      await createNewBalance({amount: 0, owner: user});
+      await createNewBalance({amount: 0, owner: realmUserObject});
     } else {
       setCurrentBalance(balances[0].amount);
     }
@@ -45,8 +45,7 @@ const BalanceProvider = ({children}: {children: React.ReactChild}) => {
 
   const createNewBalance = async (data: ICreateBalanceData) => {
     app = await getRealm();
-    const user = await getUser();
-    const balance = new Balance({...data, owner: user});
+    const balance = new Balance({...data, owner: realmUserObject});
 
     try {
       app.write(() => {

@@ -18,8 +18,6 @@ const TransactionsContext = React.createContext<ITransactionsProvider | null>(
 
 interface ITransactionsProvider {
   createTransaction: (data: ITransactionCreateData) => void;
-  updateTransaction: (id: string, data: ITransactionUpdateData) => void;
-  deleteTransaction: (id: string) => void;
   filterTransactions: (type: string, category: string | null) => void;
   transactions: Transaction[];
   lastTransactions: Transaction[];
@@ -37,7 +35,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
   const dayEnd = new Date();
   dayEnd.setHours(23, 59, 59, 999);
 
-  const {currentUserId, getUser} = useAuth();
+  const {realmUserObject} = useAuth();
 
   const {createNewBalance, currentBalance} = useBalance();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -52,7 +50,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
   ] = useState(0);
 
   useEffect(() => {
-    if (!currentUserId) {
+    if (!realmUserObject) {
       setTodayIncomeTransactionAmount(0);
       setTodayOutcomeTransactionAmount(0);
       setTransactions([]);
@@ -67,7 +65,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
     }
 
     setup();
-  }, [currentUserId]);
+  }, [realmUserObject]);
 
   const parseRealmObject = (realmObject: any, user: User) =>
     new Transaction({
@@ -84,22 +82,20 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
 
   const loadInitialTransactions = async () => {
     app = await getRealm();
-    const user = await getUser();
-
+    console.log({realmUserObject});
     const transactionsRealm = app
       .objects<Transaction>(collectionName)
-      .filtered('owner = $0', user)
+      .filtered('owner = $0', realmUserObject)
       .sorted('created_at', true);
     const firstLoadedTransactions = transactionsRealm
       .slice(0, 100)
-      .map((t) => parseRealmObject(t, user));
+      .map((t) => parseRealmObject(t, realmUserObject));
     setTransactions(firstLoadedTransactions);
     setLastTransactions(firstLoadedTransactions.slice(0, 4));
   };
 
   const getTodayIncomeTransactionAmount = async () => {
     app = await getRealm();
-    const user = await getUser();
 
     const result = app
       .objects<Transaction>(collectionName)
@@ -108,7 +104,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
         dayStart,
         dayEnd,
         ITransactionTypeEnum.INCOME,
-        user,
+        realmUserObject,
       );
     let amount = 0;
     result.forEach((t) => (amount += t.amount));
@@ -117,7 +113,6 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
 
   const getTodayOutcomeTransactionAmount = async () => {
     app = await getRealm();
-    const user = await getUser();
 
     const result = app
       .objects<Transaction>(collectionName)
@@ -126,7 +121,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
         dayStart,
         dayEnd,
         ITransactionTypeEnum.OUTCOME,
-        user,
+        realmUserObject,
       );
     let amount = 0;
     result.forEach((t) => (amount += t.amount));
@@ -135,8 +130,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
 
   const createTransaction = async (data: ITransactionCreateData) => {
     app = await getRealm();
-    const user = await getUser();
-    const transaction = new Transaction({...data, owner: user});
+    const transaction = new Transaction({...data, owner: realmUserObject});
     try {
       app.write(() => {
         app.create(collectionName, transaction, Realm.UpdateMode.Never);
@@ -154,18 +148,17 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
       transaction.type === ITransactionTypeEnum.INCOME
         ? transaction.amount + currentBalance
         : currentBalance - transaction.amount;
-    createNewBalance({amount: newBalanceAmount, owner: user});
+    createNewBalance({amount: newBalanceAmount, owner: realmUserObject});
   };
 
   const filterTransactions = async (type: string, category: string | null) => {
     app = await getRealm();
-    const user = await getUser();
 
     let transactionsRealm;
     if (type === 'Todos') {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
-        .filtered('owner = $0', user)
+        .filtered('owner = $0', realmUserObject)
         .sorted('created_at', true);
     } else if (
       type === ITransactionTypeEnum.INCOME ||
@@ -174,19 +167,19 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
     ) {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
-        .filtered('type = $0 AND owner = $1', type, user)
+        .filtered('type = $0 AND owner = $1', type, realmUserObject)
         .sorted('created_at', true);
     } else {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
         .filtered('type = $0', type)
-        .filtered('category = $0 AND owner = $1', category, user)
+        .filtered('category = $0 AND owner = $1', category, realmUserObject)
         .sorted('created_at', true);
     }
 
     const filteredTransactions = transactionsRealm
       .slice(0, 100)
-      .map((t) => parseRealmObject(t, user));
+      .map((t) => parseRealmObject(t, realmUserObject));
     setTransactions(filteredTransactions);
   };
 
@@ -200,28 +193,10 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
         );
   };
 
-  const updateTransaction = (id: string, data: ITransactionUpdateData) => {
-    const index = transactions.findIndex((t) => t.id === id);
-    if (index === -1) {
-      throw new Error('Não encontramos a transação que você deseja atualizar');
-    }
-    // TODO implement update logic
-  };
-
-  const deleteTransaction = (id: string) => {
-    const index = transactions.findIndex((t) => t.id === id);
-    if (index === -1) {
-      throw new Error('Não encontramos a transação que você deseja remover');
-    }
-    transactions.splice(index, 1);
-    setTransactions(transactions);
-  };
   return (
     <TransactionsContext.Provider
       value={{
         createTransaction,
-        deleteTransaction,
-        updateTransaction,
         filterTransactions,
         transactions,
         lastTransactions,

@@ -20,19 +20,19 @@ const AppTitle = styled.Text`
 `;
 
 const Router = (props: any) => {
-  const {isLoading, currentUserId} = useAuth();
+  const {isLoading, realmUserObject} = useAuth();
 
   useEffect(() => {
     if (!isLoading) {
       setTimeout(
         () =>
           props.navigation.navigate(
-            currentUserId ? 'MainNavigator' : 'AuthNavigator',
+            realmUserObject ? 'MainNavigator' : 'AuthNavigator',
           ),
         1000,
       );
     }
-  }, [isLoading, currentUserId]);
+  }, [isLoading, realmUserObject]);
 
   return (
     <Container>
