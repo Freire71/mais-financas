@@ -74,9 +74,9 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
       owner: user,
       amount: realmObject.amount,
       category: realmObject.category,
-      created_at: new Date(),
+      created_at: realmObject.created_at,
       description: realmObject.description,
-      updated_at: new Date(),
+      updated_at: realmObject.updated_at,
       type: realmObject.type,
       id: realmObject.id,
       title: realmObject.title,
@@ -180,7 +180,7 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
         .filtered('type = $0', type)
-        .filtered('category = $0 AND owner = $', category, user)
+        .filtered('category = $0 AND owner = $1', category, user)
         .sorted('created_at', true);
     }
 
