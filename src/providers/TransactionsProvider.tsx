@@ -7,8 +7,10 @@ import Transaction, {
 } from '../models/Transaction';
 
 import {useBalance} from './BalanceProvider';
+import {useAuth} from './AuthProvider';
 
 import getRealm from '../realm';
+import User from '../models/User';
 
 const TransactionsContext = React.createContext<ITransactionsProvider | null>(
   null,
@@ -31,11 +33,11 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
 
   const dayStart = new Date();
   dayStart.setHours(0, 0, 0, 0);
-  console.log({dayStart});
 
   const dayEnd = new Date();
   dayEnd.setHours(23, 59, 59, 999);
-  console.log({dayEnd});
+
+  const {currentUserId, getUser} = useAuth();
 
   const {createNewBalance, currentBalance} = useBalance();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -50,6 +52,14 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
   ] = useState(0);
 
   useEffect(() => {
+    if (!currentUserId) {
+      setTodayIncomeTransactionAmount(0);
+      setTodayOutcomeTransactionAmount(0);
+      setTransactions([]);
+      setLastTransactions([]);
+      return;
+    }
+
     async function setup() {
       await loadInitialTransactions();
       await getTodayIncomeTransactionAmount();
@@ -57,10 +67,11 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
     }
 
     setup();
-  }, []);
+  }, [currentUserId]);
 
-  const parseRealmObject = (realmObject: any) =>
+  const parseRealmObject = (realmObject: any, user: User) =>
     new Transaction({
+      owner: user,
       amount: realmObject.amount,
       category: realmObject.category,
       created_at: new Date(),
@@ -73,26 +84,31 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
 
   const loadInitialTransactions = async () => {
     app = await getRealm();
+    const user = await getUser();
 
     const transactionsRealm = app
       .objects<Transaction>(collectionName)
+      .filtered('owner = $0', user)
       .sorted('created_at', true);
     const firstLoadedTransactions = transactionsRealm
       .slice(0, 100)
-      .map((t) => parseRealmObject(t));
+      .map((t) => parseRealmObject(t, user));
     setTransactions(firstLoadedTransactions);
     setLastTransactions(firstLoadedTransactions.slice(0, 4));
   };
 
   const getTodayIncomeTransactionAmount = async () => {
     app = await getRealm();
+    const user = await getUser();
+
     const result = app
       .objects<Transaction>(collectionName)
       .filtered(
-        'created_at >= $0 && created_at < $1 AND type = $2',
+        'created_at >= $0 && created_at < $1 AND type = $2 AND owner = $3',
         dayStart,
         dayEnd,
         ITransactionTypeEnum.INCOME,
+        user,
       );
     let amount = 0;
     result.forEach((t) => (amount += t.amount));
@@ -101,25 +117,26 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
 
   const getTodayOutcomeTransactionAmount = async () => {
     app = await getRealm();
+    const user = await getUser();
+
     const result = app
       .objects<Transaction>(collectionName)
       .filtered(
-        'created_at >= $0 && created_at < $1 AND type = $2',
+        'created_at >= $0 && created_at < $1 AND type = $2 AND owner = $3',
         dayStart,
         dayEnd,
         ITransactionTypeEnum.OUTCOME,
+        user,
       );
     let amount = 0;
     result.forEach((t) => (amount += t.amount));
     setTodayOutcomeTransactionAmount(amount);
   };
 
-  const getArrayCopy = (list: Transaction[]) =>
-    list.map((t) => Object.assign({}, t));
-
   const createTransaction = async (data: ITransactionCreateData) => {
-    const transaction = new Transaction(data);
     app = await getRealm();
+    const user = await getUser();
+    const transaction = new Transaction({...data, owner: user});
     try {
       app.write(() => {
         app.create(collectionName, transaction, Realm.UpdateMode.Never);
@@ -137,16 +154,18 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
       transaction.type === ITransactionTypeEnum.INCOME
         ? transaction.amount + currentBalance
         : currentBalance - transaction.amount;
-    createNewBalance({amount: newBalanceAmount});
+    createNewBalance({amount: newBalanceAmount, owner: user});
   };
 
   const filterTransactions = async (type: string, category: string | null) => {
     app = await getRealm();
+    const user = await getUser();
 
     let transactionsRealm;
     if (type === 'Todos') {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
+        .filtered('owner = $0', user)
         .sorted('created_at', true);
     } else if (
       type === ITransactionTypeEnum.INCOME ||
@@ -155,19 +174,19 @@ const TransactionsProvider = ({children}: {children: React.ReactChild}) => {
     ) {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
-        .filtered('type = $0', type)
+        .filtered('type = $0 AND owner = $1', type, user)
         .sorted('created_at', true);
     } else {
       transactionsRealm = app
         .objects<Transaction>(collectionName)
         .filtered('type = $0', type)
-        .filtered('category = $0', category)
+        .filtered('category = $0 AND owner = $', category, user)
         .sorted('created_at', true);
     }
 
     const filteredTransactions = transactionsRealm
       .slice(0, 100)
-      .map((t) => parseRealmObject(t));
+      .map((t) => parseRealmObject(t, user));
     setTransactions(filteredTransactions);
   };
 
