@@ -1,9 +1,15 @@
 # +Finanças
 
-O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das suas transações de entrada e saída. 
+O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das suas transações de entrada e saída.  
+[Vídeo sobre o app +Finanças](https://drive.google.com/file/d/124doJTTExpu3lM8DKf4eMq4rOv9u4Au8/view?usp=sharing)  
 
+<p align="center">
+    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-1.png" alt="Tour" width="200"/>
+    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-2.png" alt="Home" width="200"/>
+    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-3.png" alt="Cadastrar nova transação" width="200"/>
+    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-4.png" alt="Listagem de transações" width="200"/>
+</p>
 
-[Vídeo sobre o app +Finanças](https://drive.google.com/file/d/124doJTTExpu3lM8DKf4eMq4rOv9u4Au8/view?usp=sharing)
 
 
 ## Desenvolvendo localmente
