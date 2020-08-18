@@ -1,5 +1,12 @@
 import React from 'react';
-import {FlatList} from 'react-native';
+import {
+  FlatList,
+  Animated,
+  Dimensions,
+  ListRenderItemInfo,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import styled from 'styled-components/native';
 import {
   heightPercentageToDP as hp,
@@ -47,15 +54,15 @@ export const DotContainer = styled.View`
   margin-top: ${hp(2.2)}px;
 `;
 
-export const Dot = styled.View<{isActive: boolean}>`
+const Dot = styled.View`
   width: 12px;
   height: 12px;
   border-radius: 6px;
   margin: 0px 5px;
   border: 1px solid #424957;
-
-  background-color: ${(props) => (props.isActive ? '#6C63FF' : '#FFF')};
 `;
+
+export const AnimatedDot = Animated.createAnimatedComponent(Dot);
 
 const Title = styled.Text`
   text-align: center;
@@ -80,11 +87,28 @@ const Item = styled.View`
   justify-content: center;
 `;
 
+interface TourItem {
+  title: string;
+  subtitle: string;
+  imageName: string;
+}
+
 interface IProps extends NavigationStackScreenProps {}
 
+const ScreenWidth = Dimensions.get('window').width;
+
 const Tour = (props: IProps) => {
-  const [currentView, setCurrentView] = React.useState<number>(0);
-  const tourData = [
+  const [scrollX, setScrollX] = React.useState(0);
+
+  const dotIndex: Animated.AnimatedDivision = Animated.divide(
+    scrollX,
+    ScreenWidth,
+  );
+
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    setScrollX(event.nativeEvent.contentOffset.x);
+  };
+  const tourData: TourItem[] = [
     {
       title: 'Tenha controle de todos seus gastos',
       subtitle:
@@ -116,7 +140,7 @@ const Tour = (props: IProps) => {
     }
   };
 
-  const renderItem = ({item, index}: {item: any; index: number}) => {
+  const renderItem = ({item}: {item: TourItem}) => {
     return (
       <Item>
         {getSVG(item.imageName)}
@@ -136,13 +160,22 @@ const Tour = (props: IProps) => {
           data={tourData}
           renderItem={renderItem}
           keyExtractor={(_, index: number) => `tour-item-${index}`}
+          onScroll={onScroll}
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
         />
         <DotContainer>
-          {tourData.map((_, index) => (
-            <Dot key={index} isActive={index === currentView} />
-          ))}
+          {tourData.map((_, index) => {
+            const dotColor = dotIndex.interpolate({
+              inputRange: [index - 1, index, index + 1],
+              outputRange: ['#fff', '#6C63FF', '#fff'],
+              extrapolate: 'clamp',
+            });
+
+            return (
+              <AnimatedDot style={{backgroundColor: dotColor}} key={index} />
+            );
+          })}
         </DotContainer>
       </Content>
       <Footer>
