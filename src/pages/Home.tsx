@@ -9,6 +9,7 @@ import TransactionList from '../components/TransactionList';
 
 import {useTransactions} from '../providers/TransactionsProvider';
 import {useBalance} from '../providers/BalanceProvider';
+import {useAuth} from '../providers/AuthProvider';
 
 const Container = styled.View`
   padding-top: 12px;
@@ -25,9 +26,22 @@ const Home = (props: IProps) => {
     todayOutcomeTransactionAmount,
   } = useTransactions();
   const {currentBalance} = useBalance();
+  const {logout} = useAuth();
+
   return (
     <>
-      <PageHeader label="+Finanças" />
+      <PageHeader
+        label="+Finanças"
+        rightAction={{
+          iconName: 'exit-outline',
+          onPress: async () => {
+            await logout();
+            props.navigation.navigate('AuthNavigator');
+          },
+          AHint: 'Ao apertar no ícone você será desconectado',
+          ALabel: 'Sair',
+        }}
+      />
       <Container>
         <BalanceCard
           todayIncome={todayIncomeTransactionAmount}
