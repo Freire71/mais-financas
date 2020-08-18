@@ -1,5 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import Realm from 'realm';
+import ShowSnackBar from '../utils/showSnackBar';
+
 import User, {ICreateUserData} from '../models/User';
 import Transaction, {ITransactionTypeEnum} from '../models/Transaction';
 import Balance from '../models/Balance';
@@ -17,6 +19,7 @@ interface IAuthProvider {
   checkIfEmailAlreadyExists: (email: string) => Promise<boolean>;
   login: (email: string) => Promise<boolean>;
   logout: () => Promise<void>;
+  getUser: () => Promise<any | undefined>;
   currentUserId: string | null;
   isLoading: boolean;
 }
@@ -24,7 +27,7 @@ interface IAuthProvider {
 const AuthProvider = ({children}: {children: React.ReactChild}) => {
   let app: Realm;
   const collectionName = 'User';
-  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -39,15 +42,12 @@ const AuthProvider = ({children}: {children: React.ReactChild}) => {
     app = await getRealm();
     const sessions = app.objects<Session>('Session').sorted('created_at', true);
     const lastSession = sessions[0];
-    console.log(lastSession.owner);
-    if (lastSession && lastSession.ended_at === null) {
-      const user = await getUserById(lastSession.owner.id);
-      setCurrentUserId(user.id);
+    if (lastSession && lastSession.ended_at === null && lastSession.owner) {
+      const user: any = await getUserById(lastSession.owner.id);
+      if (user && user.id) {
+        setCurrentUserId(user.id);
+      }
     }
-  };
-
-  const loadCurrentUser = async () => {
-    app = await getRealm();
   };
 
   const getUserById = async (userId: string) => {
@@ -55,8 +55,6 @@ const AuthProvider = ({children}: {children: React.ReactChild}) => {
     const user = app.objectForPrimaryKey('User', userId);
     return user;
   };
-
-  const getCurrentUserRealmObject = (userId: string) => {};
 
   const createNewAccount = async (
     data: ICreateUserData,
@@ -80,8 +78,8 @@ const AuthProvider = ({children}: {children: React.ReactChild}) => {
                 title: 'Transação inicial',
                 amount: initialValue,
                 type: ITransactionTypeEnum.INCOME,
+                owner: createdUser,
               }),
-              owner: createdUser,
             },
             Realm.UpdateMode.Never,
           );
@@ -89,17 +87,17 @@ const AuthProvider = ({children}: {children: React.ReactChild}) => {
         app.create(
           'Balance',
           {
-            ...new Balance({amount: initialValue}),
-            owner: createdUser,
+            ...new Balance({amount: initialValue, owner: createdUser}),
           },
           Realm.UpdateMode.Never,
         );
         app.create(
           'Session',
-          new Session({user: createdUser}),
+          new Session({owner: createdUser}),
           Realm.UpdateMode.Never,
         );
       });
+      setCurrentUserId(user.id);
     } catch (e) {
       return console.log('Erro ao cadastrar um usuário: ', e);
     }
@@ -111,18 +109,54 @@ const AuthProvider = ({children}: {children: React.ReactChild}) => {
       .objects<User>(collectionName)
       .filtered('email = $0', email);
     if (users[0]) {
-      console.log('Existe usuário');
       return true;
     }
     return false;
   };
 
-  const login = async (email: string) => {
-    const exists = await checkIfEmailAlreadyExists(email);
-    return exists;
+  const getUserByEmail = async (email: string) => {
+    app = await getRealm();
+    const users = app
+      .objects<User>(collectionName)
+      .filtered('email = $0', email);
+    if (users[0]) {
+      return users[0];
+    }
+    return undefined;
   };
 
-  const logout = async () => {};
+  const login = async (email: string) => {
+    app = await getRealm();
+    const user = await getUserByEmail(email);
+    if (!user) {
+      ShowSnackBar('E-mail não cadastrado', -1);
+
+      return false;
+    }
+    app.write(() => {
+      app.create('Session', new Session({owner: user}), Realm.UpdateMode.Never);
+    });
+    setCurrentUserId(user.id);
+    return true;
+  };
+
+  const logout = async () => {
+    app = await getRealm();
+    const user = await getUserById(currentUserId as string);
+    const sessions = app
+      .objects<Session>('Session')
+      .filtered('owner = $0', user)
+      .sorted('created_at', true);
+    const lastSession = sessions[0];
+    app.write(() => {
+      app.create(
+        'Session',
+        {id: lastSession.id, ended_at: new Date()},
+        Realm.UpdateMode.Modified,
+      );
+    });
+    setCurrentUserId(null);
+  };
 
   return (
     <AuthContext.Provider
@@ -133,6 +167,7 @@ const AuthProvider = ({children}: {children: React.ReactChild}) => {
         checkIfEmailAlreadyExists,
         login,
         logout,
+        getUser: () => getUserById(currentUserId as string),
       }}>
       {children}
     </AuthContext.Provider>
