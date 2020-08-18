@@ -1,4 +1,5 @@
 import {ObjectId} from 'bson';
+import User from './User';
 
 export enum ITransactionTypeEnum {
   INCOME = 'Entrada',
@@ -15,6 +16,7 @@ export enum ITransactionCategoryEnum {
 }
 
 export interface ITransactionCreateData {
+  owner: User;
   id?: string;
   title: string;
   amount: number;
@@ -33,6 +35,8 @@ export interface ITransactionUpdateData {
 }
 
 class Transaction {
+  public owner: User;
+
   public id?: string;
 
   public title: string;
@@ -50,6 +54,7 @@ class Transaction {
   public updated_at: Date;
 
   constructor(data: ITransactionCreateData) {
+    this.owner = data.owner;
     this.id = data.id ? data.id : String(new ObjectId());
     this.title = data.title;
     this.amount = data.amount;

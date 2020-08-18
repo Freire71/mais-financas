@@ -3,7 +3,7 @@ import User from './User';
 
 export interface ICreateSessionData {
   id?: string;
-  user: User;
+  owner: User;
   created_at?: Date;
   ended_at?: Date;
 }
@@ -16,7 +16,7 @@ class Session {
 
   constructor(data: ICreateSessionData) {
     this.id = data.id ? data.id : String(new ObjectId());
-    this.owner = data.user;
+    this.owner = data.owner;
     this.created_at = data.created_at ? data.created_at : new Date();
     this.ended_at = data.ended_at ? data.ended_at : null;
   }
