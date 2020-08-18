@@ -5,7 +5,6 @@ O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das su
 
 ## Screenshots
 <p align="center">
-<img src="/samples/screenshots/screenshot-5.png"  width="200">
 <img src="/samples/screenshots/screenshot-1.png"  width="200">
 <img src="/samples/screenshots/screenshot-2.png"  width="200">
 <img src="/samples/screenshots/screenshot-3.png"  width="200">
