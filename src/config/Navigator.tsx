@@ -11,7 +11,9 @@ import TourPage from '../pages/Tour';
 import HomePage from '../pages/Home';
 import ListTransactionsPage from '../pages/ListTransactions';
 import CreateTransactionpage from '../pages/CreateTransaction';
-import EditTransactionPage from '../pages/EditTransaction';
+import LoginPage from '../pages/Login';
+import CreateAccountPage from '../pages/CreateAccount';
+import RouterPage from '../pages/Router';
 
 const stackNavigatorDefaultConfig: NavigationStackConfig = {
   headerMode: 'none',
@@ -20,6 +22,8 @@ const stackNavigatorDefaultConfig: NavigationStackConfig = {
 const AuthNavigator = createStackNavigator(
   {
     Tour: TourPage,
+    Login: LoginPage,
+    CreateAccount: CreateAccountPage,
   },
   {
     ...stackNavigatorDefaultConfig,
@@ -33,7 +37,6 @@ const TabNavigator = createBottomTabNavigator(
     CreateTransaction: CreateTransactionpage,
 
     ListTransactions: ListTransactionsPage,
-    // EditTransaction: EditTransactionPage,
   },
   {
     defaultNavigationOptions: ({navigation}) => ({
@@ -79,9 +82,10 @@ export default createAppContainer(
       MainNavigator: {
         screen: TabNavigator,
       },
+      RouterPage,
     },
     {
-      initialRouteName: 'MainNavigator',
+      initialRouteName: 'RouterPage',
     },
   ),
 );
