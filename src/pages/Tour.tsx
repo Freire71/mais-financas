@@ -88,7 +88,7 @@ const Tour = (props: IProps) => {
     {
       title: 'Tenha controle de todos seus gastos',
       subtitle:
-        'Vamos te ajudar a chegar em um outro patamar na sua vida financeira',
+        'Vamos te ajudar a chegar no próximo patamar da sua vida financeira',
       imageName: 'steppingUp',
     },
     {
