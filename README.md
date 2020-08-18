@@ -3,11 +3,13 @@
 O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das suas transações de entrada e saída.  
 [Vídeo sobre o app +Finanças](https://drive.google.com/file/d/124doJTTExpu3lM8DKf4eMq4rOv9u4Au8/view?usp=sharing)  
 
+## Screenshots
+<!-- ![](samples/screenshots/screenshot-1.png) -->
 <p align="center">
-    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-1.png" alt="Tour" width="200"/>
-    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-2.png" alt="Home" width="200"/>
-    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-3.png" alt="Cadastrar nova transação" width="200"/>
-    <img src="https://gitlab.com/Freire712/transactions-manager/-/blob/master/samples/screenshots/screenshot-4.png" alt="Listagem de transações" width="200"/>
+<img src="/samples/screenshots/screenshot-1.png"  width="200">
+<img src="/samples/screenshots/screenshot-2.png"  width="200">
+<img src="/samples/screenshots/screenshot-3.png"  width="200">
+<img src="/samples/screenshots/screenshot-4.png"  width="200">
 </p>
 
 
@@ -16,6 +18,7 @@ O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das su
 - Execute `yarn` para rodar instalar as dependências.
 - Execute `yarn ios` para rodar a aplicação iOS ou `yarn android` para rodar no android.
 - É recomendado fazer o download da ferramenta **Realm Studio**. A mesma está disponível para download  [aqui](https://github.com/realm/realm-studio/releases)
+<img src="https://gblobscdn.gitbook.com/assets%2F-L-nWFFFG5HNhz4YeOI_%2F-LGCcT4Y80DggHA2oNL1%2F-LGCdN0s54D2D7aTDXzg%2Fstudio-landing.png?alt=media&token=718f106d-1667-4584-903d-f89a63653283"  width="400">
 
 
 ## Testes
