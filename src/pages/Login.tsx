@@ -3,10 +3,14 @@ import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
 import {withNavigation} from 'react-navigation';
 import {NavigationStackScreenProps} from 'react-navigation-stack';
+import Validator from 'validator';
+import ShowSnackBar from '../utils/showSnackBar';
 
 import PageHeader from '../components/PageHeader';
 import Input from '../components/Input';
 import {Button} from 'react-native-elements';
+
+import {useAuth} from '../providers/AuthProvider';
 
 const ButtonContainer = styled.View`
   width: 60%;
@@ -16,8 +20,16 @@ const ButtonContainer = styled.View`
 interface IProps extends NavigationStackScreenProps {}
 
 const Login = (props: IProps) => {
+  const {login} = useAuth();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const onLoginPress = async () => {
+    if (!Validator.isEmail(email)) {
+      return ShowSnackBar('Informe um e-mail válido', -1);
+    }
+    const success = await login(email);
+    return success && props.navigation.navigate('MainNavigator');
+  };
   return (
     <>
       <PageHeader
@@ -45,7 +57,7 @@ const Login = (props: IProps) => {
         <ButtonContainer>
           <Button
             raised
-            onPress={() => props.navigation.navigate('MainNavigator')}
+            onPress={onLoginPress}
             title="Entrar"
             titleStyle={{
               color: '#fff',
