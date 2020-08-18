@@ -23,7 +23,7 @@ O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das su
 ## Testes
 - Os testes são desenvolvindos utilizando a biblioteca `react-native-testing-library`.
 - Para extender as capacidades do Jest foi utiliza a biblioteca `@testing-library/jest-native`
-- Para executar os testes basta executar `yarn test`
+- Para executar os testes basta rodar `yarn test`
 
 ## Principais tecnologias utilizadas
 - React Native (0.63)
