@@ -4,7 +4,6 @@ O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das su
 [Vídeo sobre o app +Finanças](https://drive.google.com/file/d/124doJTTExpu3lM8DKf4eMq4rOv9u4Au8/view?usp=sharing)  
 
 ## Screenshots
-<!-- ![](samples/screenshots/screenshot-1.png) -->
 <p align="center">
 <img src="/samples/screenshots/screenshot-1.png"  width="200">
 <img src="/samples/screenshots/screenshot-2.png"  width="200">
@@ -23,7 +22,7 @@ O +Finanças é um aplicativo que tem como objetivo te ajudar na controle das su
 
 ## Testes
 - Os testes são desenvolvindos utilizando a biblioteca `react-native-testing-library`.
-- Para extender as capacidades do
+- Para extender as capacidades do Jest foi utiliza a biblioteca `@testing-library/jest-native`
 - Para executar os testes basta executar `yarn test`
 
 ## Principais tecnologias utilizadas
