@@ -35,21 +35,31 @@ const DataContainer = styled.View`
 
 const Title = styled.Text<{type: ITransactionTypeEnum}>`
   font-family: ${(props) => props.theme.fontFamilyBold};
-  font-size: 16px;
+  font-size: 18px;
   color: ${(props) => props.theme.primaryTextColor};
 `;
 
 const Category = styled.Text`
+  font-size: 16px;
+
   font-family: ${(props) => props.theme.fontFamily};
   color: ${(props) => props.theme.secondaryTextColor};
 `;
 
 const Amount = styled.Text<{type: ITransactionTypeEnum}>`
   font-family: ${(props) => props.theme.fontFamilyBold};
+  font-size: 16px;
+
   color: ${(props) =>
     props.type === ITransactionTypeEnum.INCOME
       ? props.theme.secondaryIncomeColor
       : props.theme.secondaryOutcomeColor};
+`;
+
+const Date = styled.Text`
+  margin-top: 4px;
+  font-size: 12px;
+  color: ${(props) => props.theme.secondaryTextColor};
 `;
 
 export const AHints = {
@@ -83,6 +93,9 @@ const TransactionItem = (props: Transaction) => {
         <Amount accessibilityHint={AHints.amount} type={props.type}>
           {DisplayMonetaryValue(props.amount)}
         </Amount>
+        <Date>{`Dia ${props.created_at.getDate()}/${
+          props.created_at.getMonth() + 1
+        } às ${props.created_at.getHours()}:${props.created_at.getMinutes()}h`}</Date>
       </DataContainer>
       <Icon
         style={{flex: 1}}
