@@ -8,9 +8,9 @@ import {
 } from 'react-native-responsive-screen';
 import {NavigationTabScreenProps} from 'react-navigation-tabs';
 import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
-import Snackbar from 'react-native-snackbar';
 import Alert from 'react-native-awesome-alerts';
 
+import ShowSnackBar from '../utils/showSnackBar';
 import PageHeader from '../components/PageHeader';
 import Input from '../components/Input';
 import TransactionListInput from '../components/TransactionListInput';
@@ -96,12 +96,7 @@ const CreateTransaction = (props: IProps) => {
     };
     createTransaction(transaction as ITransactionCreateData);
     clearData();
-    return Snackbar.show({
-      text: 'Transação cadastrada com sucesso!',
-      fontFamily: 'Nunito-Regular',
-      duration: Snackbar.LENGTH_SHORT,
-      backgroundColor: '#6C63FF',
-    });
+    return ShowSnackBar('Transação cadastrada com sucesso!', -1);
   };
 
   return (
