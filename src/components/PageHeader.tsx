@@ -28,6 +28,7 @@ interface IProps {
 
 export const AHints = {
   headerLabel: 'Aqui é exibido o nome da página atual',
+  header: 'Esse é o cabeçalho da página',
 };
 
 export const TestIDs = {
@@ -53,11 +54,14 @@ const PageHeader = (props: IProps) => {
         backgroundColor: 'rgb(250,250,250)',
       }}>
       <Header
+        accessibilityHint={AHints.header}
         statusBarProps={{barStyle: 'dark-content'}}
         barStyle="light-content"
         rightComponent={props.rightAction && <Action {...props.rightAction} />}
         leftComponent={props.leftAction && <Action {...props.leftAction} />}
-        centerComponent={<Label>{props.label}</Label>}
+        centerComponent={
+          <Label accessibilityLabel={AHints.headerLabel}>{props.label}</Label>
+        }
         containerStyle={{
           backgroundColor: '#fff',
           shadowColor: '#000',

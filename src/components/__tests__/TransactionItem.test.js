@@ -47,9 +47,8 @@ describe('<TransactionItem />', () => {
     expect(amount.children[0]).toBe(
       DisplayMonetaryValue(incomeTransaction.amount),
     );
-    expect(type._fiber.stateNode.props.accessibilityLabel).toBe(
-      ALabels.incomeTransaction,
-    );
+    expect(type).toHaveProp('accessibilityLabel', ALabels.incomeTransaction);
+
     try {
       getByA11yHint(AHints.category);
     } catch (err) {
@@ -70,9 +69,8 @@ describe('<TransactionItem />', () => {
     expect(amount.children[0]).toBe(
       DisplayMonetaryValue(outcomeFoodTransaction.amount),
     );
-    expect(type._fiber.stateNode.props.accessibilityLabel).toBe(
-      ALabels.outcomeTransaction,
-    );
+    expect(type).toHaveProp('accessibilityLabel', ALabels.outcomeTransaction);
+
     expect(category.children[0]).toBe(ITransactionCategoryEnum.FOOD);
   });
 
@@ -89,9 +87,7 @@ describe('<TransactionItem />', () => {
     expect(amount.children[0]).toBe(
       DisplayMonetaryValue(outcomeGeneralTransaction.amount),
     );
-    expect(type._fiber.stateNode.props.accessibilityLabel).toBe(
-      ALabels.outcomeTransaction,
-    );
+    expect(type).toHaveProp('accessibilityLabel', ALabels.outcomeTransaction);
     expect(category.children[0]).toBe(ITransactionCategoryEnum.GENERAL);
   });
 });

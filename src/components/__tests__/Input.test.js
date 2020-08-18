@@ -29,6 +29,8 @@ describe('<Input />', () => {
     expect(props.placeholder).toBe(placeholder);
     expect(props.keyboardType).toBe(keyboardType);
     expect(props.value).toBe(initialValue);
+    expect(props.value).toBe(initialValue);
+    expect(props.autoCapitalize).toBe('none');
   });
 
   it('should trigger mock function when input value changes', () => {

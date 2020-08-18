@@ -14,30 +14,42 @@ describe('<PageHeader />', () => {
 
   it('should render properly', () => {
     const mockFn = jest.fn();
-    const {getByA11yHint} = render(
-      <PageHeader label={label} rightAction={{...action, onPress: mockFn}} />,
+    const {getByA11yHint, getAllByA11yHint, getByText} = render(
+      <PageHeader
+        label={label}
+        rightAction={{...action, onPress: mockFn}}
+        leftAction={{...action, onPress: mockFn}}
+      />,
     );
 
-    const labelComponent = getByA11yHint(AHints.headerLabel);
-    const iconContainer = getByA11yHint(action.AHint);
+    const iconContainers = getAllByA11yHint(action.AHint);
 
-    expect(labelComponent.children[0]).toBe(label);
-    expect(iconContainer).toBeDefined();
+    expect(getByText(label)).toBeDefined();
+    expect(iconContainers.length).toBe(2);
   });
   it('should trigger mock function on icon press', () => {
-    const mockFn = jest.fn();
-    const {getByTestId} = render(
-      <PageHeader label={label} rightAction={{...action, onPress: mockFn}} />,
+    const rightMockFn = jest.fn();
+    const leftMockFn = jest.fn();
+    const {getAllByTestId} = render(
+      <PageHeader
+        label={label}
+        rightAction={{...action, onPress: rightMockFn}}
+        leftAction={{...action, onPress: leftMockFn}}
+      />,
     );
-    const iconContainer = getByTestId(TestIDs.iconContainer);
-    fireEvent(iconContainer, 'onPress');
-    expect(mockFn).toHaveBeenCalledWith();
+    const iconContainer = getAllByTestId(TestIDs.iconContainer);
+
+    fireEvent(iconContainer[0], 'onPress');
+    fireEvent(iconContainer[1], 'onPress');
+
+    expect(rightMockFn).toHaveBeenCalledWith();
+    expect(leftMockFn).toHaveBeenCalledWith();
   });
 
-  it('should not render right action', () => {
+  it('should not render any action', () => {
     const {getByTestId} = render(<PageHeader label={label} />);
     try {
-      const iconContainer = getByTestId(TestIDs.iconContainer);
+      getByTestId(TestIDs.iconContainer);
     } catch (err) {
       expect(err).toBeDefined();
     }
