@@ -10,7 +10,7 @@ import {useAuth} from '../providers/AuthProvider';
 import PageHeader from '../components/PageHeader';
 import Input from '../components/Input';
 import {Button} from 'react-native-elements';
-import Snackbar from 'react-native-snackbar';
+import ShowSnackBar from '../utils/showSnackBar';
 
 const ButtonContainer = styled.View`
   width: 60%;
@@ -52,12 +52,10 @@ const CreateAcount = (props: IProps) => {
     }
     const exists = await checkIfEmailAlreadyExists(email);
     if (exists) {
-      return Snackbar.show({
-        text: 'O e-mail informado já está cadastrado na base de dados',
-        fontFamily: 'Nunito-Regular',
-        duration: Snackbar.LENGTH_SHORT,
-        backgroundColor: '#6C63FF',
-      });
+      return ShowSnackBar(
+        'O e-mail informado já está cadastrado na base de dados',
+        -1,
+      );
     }
     await createNewAccount({email, name}, initialValue);
     props.navigation.navigate('Home');
